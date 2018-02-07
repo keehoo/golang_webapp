@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-
+	"html/template"
 	"github.com/gorilla/mux"
 )
 
@@ -13,6 +13,7 @@ import (
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/hello", handler).Methods("GET")
+	r.HandleFunc("/morris", morris).Methods("GET")
 
 	staticFileDirectory := http.Dir("./assets/")
 
@@ -30,4 +31,10 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello World!")
+}
+
+func morris(w http.ResponseWriter, r *http.Request) {
+	index := template.Must(template.ParseFiles(
+		"./assets/morris.html"))
+	index.Execute(w, nil)
 }
