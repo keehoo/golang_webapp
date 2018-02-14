@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template</title>
+    <title>Golang Webapp - passed val</title>
     <!-- Core CSS - Include with every page -->
     <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
     <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
@@ -47,7 +47,7 @@
                         <li>
                             <a href="#">
                                 <div>
-                                    <strong><span class=" label label-danger">Andrew Smith</span></strong>
+                                    <strong><span class=" label label-danger">Andrew Smith {{.}}</span></strong>
                                     <span class="pull-right text-muted">
                                         <em>Yesterday</em>
                                     </span>
@@ -386,7 +386,7 @@
             <div class="row">
                  <!--  page header -->
                 <div class="col-lg-12">
-                    <h1 class="page-header">Morris Charts</h1>
+                    <h1 class="page-header">Morris Charts {{.}}</h1>
                 </div>
                 <!--end  page header -->
             </div>
