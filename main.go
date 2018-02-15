@@ -6,7 +6,8 @@ import (
 	"html/template"
 	"github.com/gorilla/mux"
 	"database/sql"
-
+	"io/ioutil"
+	"log"
 )
 
 // The new router function creates the router and
@@ -25,12 +26,32 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/hello", handler).Methods("GET")
 	r.HandleFunc("/morris", morris).Methods("GET")
 	r.HandleFunc("/db", database).Methods("GET")
+	r.HandleFunc("/users", users).Methods("GET")
 
 	staticFileDirectory := http.Dir("./assets/")
 
 	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(staticFileDirectory))
 	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
 	return r
+}
+
+func users(w http.ResponseWriter, r *http.Request) {
+
+	res, err := http.Get("http://localhost:8081/api/users/allUsers")
+	if err != nil {
+	
+	}
+
+
+	robots, err := ioutil.ReadAll(res.Body)
+	tpl.ExecuteTemplate(w, "morris.html", string(robots))
+
+	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	
 }
 
 func main() {
