@@ -27,12 +27,26 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/morris", morris).Methods("GET")
 	r.HandleFunc("/db", database).Methods("GET")
 	r.HandleFunc("/users", users).Methods("GET")
+	r.HandleFunc("/form", form).Methods("GET")
+	r.HandleFunc("/action-page", action).Methods("POST")
 
 	staticFileDirectory := http.Dir("./assets/")
 
 	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(staticFileDirectory))
 	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
 	return r
+}
+
+func action(w http.ResponseWriter, r *http.Request) {
+
+	log.Print("POST")
+	fmt.Printf("POST in action-page")
+
+	  r.ParseForm()
+        // logic part of log in
+        fmt.Println("First Name :", r.Form["firstname"])
+        fmt.Println("Lase Name:", r.Form["lastname"])
+	
 }
 
 func users(w http.ResponseWriter, r *http.Request) {
@@ -50,8 +64,13 @@ func users(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
-	
+}
+
+func form(w http.ResponseWriter, r *http.Request) {
+	log.Printf("form")
+	fmt.Printf("fmt printf")
+		tpl.ExecuteTemplate(w, "me_tests.html", nil)
+
 }
 
 func main() {
