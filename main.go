@@ -104,8 +104,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// json.NewEncoder(w).Encode(people)
 }
 
+var dupa = "{token: \"dupa\"}"
+
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "token: 'dupa'")
+	fmt.Fprintf(w, dupa)
 }
 
 func morris(w http.ResponseWriter, r *http.Request) {
