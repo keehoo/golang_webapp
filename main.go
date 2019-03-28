@@ -1,24 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"html/template"
-	"github.com/gorilla/mux"
 	"database/sql"
+	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 // The new router function creates the router and
 // returns it to us. We can now use this function
 // to instantiate and test the router outside of the main function
 
-var tpl *template.Template 
+var tpl *template.Template
 
 func init() {
 	tpl = template.Must(template.ParseGlob("./assets/*.html"))
-	
+
 }
 
 func newRouter() *mux.Router {
@@ -29,6 +30,7 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/users", users).Methods("GET")
 	r.HandleFunc("/form", form).Methods("GET")
 	r.HandleFunc("/action-page", action).Methods("POST")
+	r.HandleFunc("/login/{id}", login).Methods("POST")
 
 	staticFileDirectory := http.Dir("./assets/")
 
@@ -42,20 +44,19 @@ func action(w http.ResponseWriter, r *http.Request) {
 	log.Print("POST")
 	fmt.Printf("POST in action-page")
 
-	  r.ParseForm()
-        // logic part of log in
-        fmt.Println("First Name :", r.Form["firstname"])
-        fmt.Println("Lase Name:", r.Form["lastname"])
-	
+	r.ParseForm()
+	// logic part of log in
+	fmt.Println("First Name :", r.Form["firstname"])
+	fmt.Println("Lase Name:", r.Form["lastname"])
+
 }
 
 func users(w http.ResponseWriter, r *http.Request) {
 
 	res, err := http.Get("http://localhost:8081/api/users/allUsers")
 	if err != nil {
-	
-	}
 
+	}
 
 	robots, err := ioutil.ReadAll(res.Body)
 	tpl.ExecuteTemplate(w, "morris.html", string(robots))
@@ -69,7 +70,7 @@ func users(w http.ResponseWriter, r *http.Request) {
 func form(w http.ResponseWriter, r *http.Request) {
 	log.Printf("form")
 	fmt.Printf("fmt printf")
-		tpl.ExecuteTemplate(w, "me_tests.html", nil)
+	tpl.ExecuteTemplate(w, "me_tests.html", nil)
 
 }
 
@@ -82,20 +83,29 @@ func main() {
 
 func database(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("mysql", "root:root@/mysql")
-if err != nil {
-    panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
-}
-defer db.Close()
+	if err != nil {
+		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
+	}
+	defer db.Close()
 
-// Open doesn't open a connection. Validate DSN data:
-err = db.Ping()
-if err != nil {
-    panic(err.Error()) // proper error handling instead of panic in your app
+	// Open doesn't open a connection. Validate DSN data:
+	err = db.Ping()
+	if err != nil {
+		panic(err.Error()) // proper error handling instead of panic in your app
+	}
 }
+
+func login(w http.ResponseWriter, r *http.Request) {
+	// params := mux.Vars(r)
+	// var person Person
+	// _ = json.NewDecoder(r.Body).Decode(&person)
+	// person.ID = params["id"]
+	// people = append(people, person)
+	// json.NewEncoder(w).Encode(people)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
+	fmt.Fprintf(w, "token: 'dupa'")
 }
 
 func morris(w http.ResponseWriter, r *http.Request) {
