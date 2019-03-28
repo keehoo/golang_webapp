@@ -24,7 +24,7 @@ func init() {
 
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/hello", handler).Methods("GET")
+	r.HandleFunc("/hello", handler).Methods("POST")
 	r.HandleFunc("/morris", morris).Methods("GET")
 	r.HandleFunc("/db", database).Methods("GET")
 	r.HandleFunc("/users", users).Methods("GET")
